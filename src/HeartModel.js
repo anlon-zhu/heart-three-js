@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -15,6 +15,7 @@ const textureCube = new CubeTextureLoader().load([
 
 const HeartModel = ({ heartRef, explode }) => {
   const {scene } = useThree();
+  const [heartClones, setHeartClones] = useState([]);
 
   // Load the heart model and its texture
   useEffect(() => {
@@ -46,6 +47,13 @@ const HeartModel = ({ heartRef, explode }) => {
     if (heartRef.current) {
       heartRef.current.rotation.y += 0.005;
     }
+    if (heartClones.length > 0) {
+      heartClones.forEach((clone) => {
+        clone.position.x += clone.velocity.x;
+        clone.position.y += clone.velocity.y;
+        clone.position.z += clone.velocity.z;
+      });
+    }
   });
 
 
@@ -76,11 +84,30 @@ useEffect(() => {
           } else {
             // Remove the heart after shrinking animation
             scene.remove(heartRef.current);
+            createHeartClones();
           }
         };
   
         // Start the shrinking animation
         shrinkAndSpin();
+      };
+
+      const createHeartClones = () => {
+        const numClones = 30; // Number of heart clones
+        const newHeartClones = [];
+  
+        for (let i = 0; i < numClones; i++) {
+          const clone = heartRef.current.clone();
+          clone.scale.set(0.3, 0.3, 0.3); // Adjust the scale of the clones
+          clone.velocity = {
+            x: Math.random() * 0.5 + 0.25 * (Math.random() < 0.5 ? -1 : 1),
+            y: Math.random() * 0.5 + 0.25 * (Math.random() < 0.5 ? -1 : 1), // Random Y velocity within a range
+            z: Math.random() * 0.5 + 0.25 * (Math.random() < 0.5 ? -1 : 1), // Random Z velocity within a range
+          };
+          newHeartClones.push(clone);
+          scene.add(clone);
+        }
+        setHeartClones(newHeartClones);
       };
   
       // Start accelerating the spinning animation
