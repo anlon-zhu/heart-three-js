@@ -5,6 +5,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CubeTextureLoader } from 'three/src/loaders/CubeTextureLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import YesButton from './YesButton';
 
 extend({ OrbitControls });
 
@@ -52,7 +53,7 @@ const CameraControls = () => {
 
   // Set camera position and controls target to center the heart
   useEffect(() => {
-    camera.position.set(0, 40, -150); // Adjust as needed
+    camera.position.set(0, 40, 150); // Adjust as needed
     controls.current.target.set(0, 30, 0); // Adjust as needed
     controls.current.update();
   }, [camera, scene]);
@@ -71,6 +72,11 @@ const HeartScene = () => {
     'crystal.jpg',
   ]);
 
+  const handleButtonClick = () => {
+    // Handle button click logic here
+    console.log('Yes button clicked!');
+  };
+
   return (
     <Canvas style={{ background: '#0f161a' }}>
       <ambientLight intensity={0.5} />
@@ -81,10 +87,12 @@ const HeartScene = () => {
         <CameraControls />
         {/* Configure the Bloom effect */}
         <Bloom
-          luminanceThreshold={0.8}
+          luminanceThreshold={0.7}
           luminanceSmoothing={0.4}
           intensity={2.5}
         />
+        {/* Add the Yes button */}
+        <YesButton onClick={handleButtonClick} />
       </EffectComposer>
     </Canvas>
   );
