@@ -1,6 +1,6 @@
 // App.js
 import React from 'react';
-import HeartScene from './Heart'; // Adjust the path based on your file structure
+import HeartScene from './HeartScene'; // Adjust the path based on your file structure
 
 function App() {
   return (
