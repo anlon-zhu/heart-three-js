@@ -4,7 +4,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import HeartModel from './HeartModel';
 import CameraControls from './CameraControls';
 
-const HeartScene = (explode) => {
+const HeartScene = ({explode}) => {
   const heartRef = useRef();
 
   return (
