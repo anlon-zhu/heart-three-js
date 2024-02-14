@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -11,10 +11,10 @@ const textureCube = new CubeTextureLoader().load([
     'crystal.jpg',
     'crystal.jpg',
     'crystal.jpg',
-  ]);
+]);
 
 const HeartModel = ({ heartRef, explode }) => {
-  const {scene } = useThree();
+  const { scene } = useThree();
   const [heartClones, setHeartClones] = useState([]);
 
   // Load the heart model and its texture
@@ -44,25 +44,25 @@ const HeartModel = ({ heartRef, explode }) => {
 
   // Rotate the heart
   useFrame(() => {
-    if (heartRef.current) {
-      heartRef.current.rotation.y += 0.005;
-    }
-    if (heartClones.length > 0) {
+    if (heartRef.current && heartClones.length > 0) {
       heartClones.forEach((clone) => {
         clone.position.x += clone.velocity.x;
         clone.position.y += clone.velocity.y;
         clone.position.z += clone.velocity.z;
+        clone.rotation.x += 0.01;
+        clone.rotation.y += 0.02;
+        clone.rotation.z += 0.01;
       });
-    }
+    } else if (heartRef.current) {
+        heartRef.current.rotation.y += 0.005;
+      }
   });
 
-
-// Shrink and spin animation when explode prop is true
-useEffect(() => {
+  useEffect(() => {
     let rotationSpeed = 0.1;
     const maxRotationSpeed = 0.7; // Maximum rotation speed
     const acceleration = 0.005;
-    
+
     if (explode && heartRef.current) {
       const accelerateSpin = () => {
         if (rotationSpeed < maxRotationSpeed) {
@@ -74,7 +74,7 @@ useEffect(() => {
           startShrinkAnimation();
         }
       };
-  
+
       const startShrinkAnimation = () => {
         const shrinkAndSpin = () => {
           if (heartRef.current.scale.x > 0) {
@@ -87,15 +87,15 @@ useEffect(() => {
             createHeartClones();
           }
         };
-  
+
         // Start the shrinking animation
         shrinkAndSpin();
       };
 
       const createHeartClones = () => {
-        const numClones = 30; // Number of heart clones
+        const numClones = 40; // Number of heart clones
         const newHeartClones = [];
-  
+
         for (let i = 0; i < numClones; i++) {
           const clone = heartRef.current.clone();
           clone.scale.set(0.3, 0.3, 0.3); // Adjust the scale of the clones
@@ -109,13 +109,11 @@ useEffect(() => {
         }
         setHeartClones(newHeartClones);
       };
-  
+
       // Start accelerating the spinning animation
       accelerateSpin();
     }
   }, [explode, scene, heartRef]);
-  
-  
 
   return null;
 };

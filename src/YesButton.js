@@ -1,25 +1,23 @@
 import React from 'react';
-import { Html } from '@react-three/drei';
 
 const YesButton = ({ onClick }) => {
   return (
-    <Html>
     <div
+      className='button'
       style={{
         position: 'fixed',
-        top: '50%',
+        top: '80%',
         left: '50%',
+        width: '100px',
+        textAlign: 'center',
         transform: 'translate(-50%, -50%)',
         padding: '20px',
-        background: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: '5px',
-        cursor: 'pointer',
+        borderRadius: '12px',
       }}
       onClick={onClick}
     >
-      <span style={{ color: 'black', fontWeight: 'bold' }}>Yes</span>
+      <span className='yes-button-text'>yes</span>
     </div>
-      </Html>
   );
 };
 
